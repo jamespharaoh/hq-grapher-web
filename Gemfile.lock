@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    hq-grapher-web (0.0.2)
+    hq-grapher-web (0.0.5)
       hq-tools (>= 0.3.0)
       hq-web (>= 0.0.2)
 

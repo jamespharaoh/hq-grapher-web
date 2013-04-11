@@ -155,6 +155,8 @@ class Handler
 				).join(":")
 			}
 
+			args.map! { |arg| arg.to_s }
+
 			RRD.graph *args
 
 			return File.read tmp.path
