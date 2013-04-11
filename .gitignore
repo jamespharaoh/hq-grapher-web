@@ -1,0 +1,8 @@
+/.bundle
+/.gems
+/.stubs
+/config.ru
+/grapher.xml
+/hq-web.xml
+/tmp
+/*.gem
