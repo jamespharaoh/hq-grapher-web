@@ -68,7 +68,7 @@ class Handler
 		scale_steps = scale_elem.attributes["steps"].to_i
 		scale_rows = scale_elem.attributes["rows"].to_i
 
-		data = Mandar::Support::RRD.graph({
+		graph_spec = {
 			:start => Time.now.to_i - scale_steps * scale_rows,
 			:end => Time.now.to_i,
 			:width => scale_rows,
@@ -96,7 +96,9 @@ class Handler
 					:stack => output_elem.attributes["stack"] == "yes",
 				}
 			},
-		})
+		}
+
+		data = do_graph graph_spec
 
 		headers = {
 			"Content-Type" => "image/png"
@@ -109,6 +111,56 @@ class Handler
 		return [ 200, headers, body ]
 
 	end
+
+	def self.do_graph graph_spec
+
+		Tempfile.open "mandar-rrd-" do
+			|tmp|
+
+			args = [
+				tmp.path,
+				"--start", graph_spec[:start],
+				"--end", graph_spec[:end],
+				"--width", graph_spec[:width],
+				"--height", graph_spec[:height],
+				"--slope-mode",
+				"--rigid",
+			]
+
+			args += graph_spec[:data].map {
+				|data|
+				[
+					"DEF",
+					"#{data[:name]}=#{data[:source_file]}",
+					data[:source_name],
+					data[:source_function].upcase,
+				].join(":")
+			}
+
+			args += graph_spec[:calc].map {
+				|calc|
+				"CDEF:#{calc[:name]}=#{calc[:rpn]}"
+			}
+
+			args += graph_spec[:outputs].map {
+				|output|
+				(
+					[
+						output[:type].upcase,
+						"#{output[:data]}\##{output[:colour]}",
+						output[:label],
+					] + (output[:stack] ? [ "STACK" ] : [])
+				).join(":")
+			}
+
+			RRD.graph *args
+
+			return File.read tmp.path
+
+		end
+
+	end
+
 
 end
 end
