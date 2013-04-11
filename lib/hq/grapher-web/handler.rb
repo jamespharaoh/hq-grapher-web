@@ -24,7 +24,7 @@ class Handler
 			|env, params|
 
 			handler =
-				GraphHandler.new \
+				Handler.new \
 					grapher_config_elem
 
 			handler.handle \
