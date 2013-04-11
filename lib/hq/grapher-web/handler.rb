@@ -114,6 +114,8 @@ class Handler
 
 	def do_graph graph_spec
 
+		require "RRD"
+
 		Tempfile.open "mandar-rrd-" do
 			|tmp|
 
