@@ -112,7 +112,7 @@ class Handler
 
 	end
 
-	def self.do_graph graph_spec
+	def do_graph graph_spec
 
 		Tempfile.open "mandar-rrd-" do
 			|tmp|
