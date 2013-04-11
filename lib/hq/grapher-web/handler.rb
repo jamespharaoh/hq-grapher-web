@@ -49,7 +49,7 @@ class Handler
 
 		graph_elem =
 			@config_elem.find_first("
-				graph [@name = #{xp graph_name}]
+				graph [@name = #{esc_xp graph_name}]
 			")
 
 		template_name =
@@ -57,12 +57,12 @@ class Handler
 
 		template_elem =
 			@config_elem.find_first("
-				template [@name = #{xp template_name}]
+				template [@name = #{esc_xp template_name}]
 			")
 
 		scale_elem =
 			@config_elem.find_first("
-				scale [@name = #{xp scale_name}]
+				scale [@name = #{esc_xp scale_name}]
 			")
 
 		scale_steps = scale_elem.attributes["steps"].to_i
